@@ -1,0 +1,14 @@
+MainWindow
+  id: foodeaterMain
+  !text: tr('Q7')
+  size: 500 400
+  @onEscape: modules.Q7.closing()
+
+  Button
+    id: closeButton
+    anchors.bottom: parent.bottom
+    anchors.right: parent.right
+    !text: tr('Jump!')
+    width: 50
+    @onClick: modules.Q7.UpdateButtonPosition()
+
