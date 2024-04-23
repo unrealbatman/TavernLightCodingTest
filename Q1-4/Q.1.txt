@@ -1,0 +1,41 @@
+-- Function to release storage value for a player
+local function releaseStorage(player)
+    -- Ensure the player object and the setStorageValue function exist
+    if not player or type(player.setStorageValue) ~= "function" then
+        print("Error: Invalid player object or setStorageValue function.")
+        return
+    end
+    -- Set the storage value to -1 to release it
+    player:setStorageValue(1000, -1)
+end
+
+-- Event handler for player logout
+local function onLogout(player)
+    -- Ensure the player object and the getStorageValue function exist
+    if not player or type(player.getStorageValue) ~= "function" then
+        print("Error: Invalid player object or getStorageValue function.")
+        return false
+    end
+
+    -- Check if the player's storage value is 1 (indicating a specific condition)
+    if player:getStorageValue(1000) == 1 then
+        -- Schedule the releaseStorage function to be executed after 1000 milliseconds (1 second)
+        addEvent(releaseStorage, 1000, player)
+    end
+    -- Always return true to allow the player to log out
+    return true
+end
+
+-- Information
+--[[
+    The releaseStorage function releases the storage value associated with a player.
+    It checks if the player object and the setStorageValue function exist.
+    If they exist, it sets the storage value with id 1000 to -1, effectively releasing it.
+]]
+--[[
+    The onLogout function is an event handler for player logout.
+    It checks if the player object and the getStorageValue function exist.
+    If they exist, it checks if the player's storage value is set to 1 (indicating a specific condition).
+    If it is, it schedules the releaseStorage function to be executed after 1 second.
+    It always returns true to allow the player to log out.
+]]

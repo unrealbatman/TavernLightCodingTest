@@ -1,0 +1,60 @@
+function removeMemberFromPlayerParty(playerId, memberName)
+    -- Retrieve the player object based on the provided playerId
+    local player = Player(playerId)
+    -- Check if the player object exists
+    if not player then
+        -- Print an error message if the player doesn't exist
+        print("Player not found")
+        -- Return false to indicate failure
+        return false
+    end
+    
+    -- Retrieve the party object associated with the player
+    local party = player:getParty()
+    -- Check if the party object exists
+    if not party then
+        -- Print an error message if the party doesn't exist
+        print("Player's party not found")
+        -- Return false to indicate failure
+        return false
+    end
+
+    -- Create a player object for the member to be removed
+    local member = Player(memberName)
+    -- Check if the member object exists
+    if not member then
+        -- Print an error message if the member doesn't exist
+        print("Member not found")
+        -- Return false to indicate failure
+        return false
+    end
+
+    -- Retrieve the list of members in the party
+    local members = party:getMembers()
+    -- Iterate over each member in the party
+    for i, partyMember in ipairs(members) do
+        -- Check if the current party member matches the member to be removed
+        if partyMember == member then
+            -- If a match is found, remove the member from the party
+            party:removeMember(member)
+            -- Print a success message
+            print("Member removed from party")
+            -- Return true to indicate success
+            return true
+        end
+    end
+    
+    -- If the loop completes without finding the member, print an error message
+    print("Member not in party")
+    -- Return false to indicate failure
+    return false
+end
+
+-- Code Explanation:
+-- This function removes a member from a player's party based on the provided playerId and memberName.
+-- It first retrieves the player object using the playerId.
+-- Then it retrieves the party object associated with the player.
+-- Next, it creates a player object for the member to be removed.
+-- It iterates over the members of the party and removes the matching member.
+-- If the member is successfully removed, it returns true; otherwise, it returns false.
+-- Improved error handling for player, party, and member existence.

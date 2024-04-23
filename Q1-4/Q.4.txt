@@ -1,0 +1,43 @@
+void Game::addItemToPlayer(const std::string& recipient, uint16_t itemId)
+{
+    // Retrieve the player object associated with the recipient name
+    Player* player = g_game.getPlayerByName(recipient);
+    
+    // If the player does not exist, create a new player
+    if (!player) {
+        // Allocate memory for the new player object
+        player = new Player(nullptr);
+        
+        // Load player data from storage
+        if (!IOLoginData::loadPlayerByName(player, recipient)) {
+            // If loading fails, release the memory allocated for the player and return
+            delete player;
+            return;
+        }
+    }
+
+    // Create the item using the provided item ID
+    Item* item = Item::CreateItem(itemId);
+    if (!item) {
+        // If item creation fails, release the memory allocated for the player and return
+        delete player;
+        return;
+    }
+
+    // Add the item to the player's inbox
+    g_game.internalAddItem(player->getInbox(), item, INDEX_WHEREEVER, FLAG_NOLIMIT);
+
+    // If the player is offline, save their data to storage
+    if (player->isOffline()) {
+        IOLoginData::savePlayer(player);
+    }
+
+    // Release the memory allocated for the player
+    delete player;
+
+    // Explanation: 
+    // This method adds an item to a player's inventory. If the player doesn't exist, 
+    // it creates a new player object and loads player data. If the item creation fails 
+    // or the player data loading fails, it deallocates the memory for the player object 
+    // and returns. After completing the operation, it deallocates the memory for the player object.
+}
